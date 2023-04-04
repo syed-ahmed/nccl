@@ -1443,7 +1443,7 @@ static ncclResult_t commReclaim(ncclComm_t comm) {
     NCCLCHECKGOTO(commFinalize(comm, false), ret, fail);
   }
 
-  if (comm->intraComm0 == NULL || comm->initState != ncclSuccess) {
+  if (comm->initState != ncclSuccess) {
     /* if init errors happen and comm->intraComm0 == NULL, no proxy connection is built up, and no finalize thread
      * have been launched. Main thread can reclaim everything since no NCCL kernel was issued. */
     struct ncclCommFinalizeAsyncJob job;
