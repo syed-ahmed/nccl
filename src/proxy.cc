@@ -1390,11 +1390,7 @@ void* ncclProxyService(void* _args) {
   int npeers = 0;
   int stop = 0;
   int asyncOpCount = 0;
-  while (stop == 0 || (stop == 1 && npeers > 0)) {
-    /* Even if local comm aborts, we cannot let proxy thread exit if we still have peer
-     * connections. Need to wait until all other related comms call abort and safely exit
-     * together, or we could face segmentation fault. */
-    if (*comm->abortFlag != 0) stop = 1;
+  while ((stop == 0 || (stop == 1 && npeers > 0)) && *comm->abortFlag == 0) {
     /* never let proxy service thread blocks in poll, or it cannot receive abortFlag. */
     int ret;
     do {
